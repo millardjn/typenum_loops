@@ -70,7 +70,7 @@ mod tests {
 		let vec: Vec<usize> = (0..4).collect();
 		let arr: &mut[usize] = &mut[0; 4];
 
-		U4::full_unroll(|i| arr[i] = i);
+		U4::full_unroll(|i| arr[i] += i);
 
 		assert_eq!(arr, vec.as_slice());
 	}
@@ -81,7 +81,7 @@ mod tests {
 		let vec: Vec<usize> = (0..13).collect();
 		let arr: &mut[usize] = &mut[0; 13];
 
-		U4::partial_unroll(13, |i| {arr[i] = i; println!("{}", i)});
+		U4::partial_unroll(13, |i| arr[i] += i);
 
 		assert_eq!(arr, vec.as_slice());
 	}
