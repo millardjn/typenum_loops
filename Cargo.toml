@@ -1,7 +1,7 @@
 [package]
 name = "typenum_loops"
 description = "A library that provides loops which are fully or partially unrolled at compile time."
-version = "0.1.0"
+version = "0.1.1"
 authors = ["J. Millard <millard.jn@gmail.com>"]
 repository = "https://github.com/millardjn/typenum_loops"
 keywords = ["typenum", "Compile", "Time", "Loops", "Unroll"]
