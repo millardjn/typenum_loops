@@ -21,5 +21,7 @@ fn main(){
 }
 ```
 
+Note: Very large closures may not be inlined despite attempts to trick llvm by using an empty wrapper fn.
+
 ## License
 MIT
