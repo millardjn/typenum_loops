@@ -29,25 +29,33 @@ pub trait Loop: Unsigned {
 	fn partial_unroll<F: FnMut(usize)>(k: usize, mut f: F){
 		let n = Self::to_usize();
 		for i in 0..k/n{
-			Self::full_unroll(|j| call_fn_with(&mut f, j + n*i));
+			Self::full_unroll(|j| f.call_inline( j + n*i));
 		}
 
 		for i in (k/n)*n..k{
-			call_fn_with(&mut f, i);
+			f.call_inline(i);
 		}
 	}
 }
 
-#[inline(always)]
-/// Dummy function which helps force llvm into inlining the closure calls
-fn call_fn_with<F: FnMut(usize)>(f: &mut F, i: usize){
-	f(i);
+
+trait InlineCall {
+	#[inline(always)]
+	fn call_inline(&mut self, i: usize);
 }
+
+impl<F: FnMut(usize)> InlineCall for F {
+	#[inline(always)]
+	fn call_inline(&mut self, i: usize){
+		self(i);
+	}
+}
+
 
 impl<U: Unsigned, B: Bit, C: Bit> Loop for UInt<UInt<U, B>, C> where UInt<UInt<U, B>, C>: Sub<B1>, Sub1<UInt<UInt<U, B>, C>>: Loop {
 	#[inline(always)]
 	fn recurse<F: FnMut(usize)>(i: usize, mut f: F){
-		call_fn_with(&mut f, i - Self::to_usize());
+		f.call_inline(i - Self::to_usize());
 		<Sub1<Self>>::recurse(i, f);
 	}
 }
@@ -55,7 +63,7 @@ impl<U: Unsigned, B: Bit, C: Bit> Loop for UInt<UInt<U, B>, C> where UInt<UInt<U
 impl Loop for UInt<UTerm, B1> {
 	#[inline(always)]
 	fn recurse<F: FnMut(usize)>(i: usize, mut f: F){
-		call_fn_with(&mut f, i - Self::to_usize());
+		f.call_inline(i - Self::to_usize());
 	}
 }
 
