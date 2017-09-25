@@ -7,7 +7,7 @@ A library that provides loops which are fully or partially unrolled at compile t
 extern crate typenum;
 extern crate typenum_loops;
 
-use typenum::U4;
+use typenum::{U4, U6};
 use typenum_loops::Loop;
 
 fn main(){
@@ -16,8 +16,8 @@ fn main(){
     U4::full_unroll(|i| arr[i] = i);
     
     let arr2: &mut[usize] = &mut[0; 13];
-    // for i in 0..13 {arr2[i] = i} unrolled by 4
-    U4::partial_unroll(13, |i| arr2[i] = i);
+    // for i in 0..13 {arr2[i] = i} unrolled by 6
+    U6::partial_unroll(13, |i, _| arr2[i] = i);
 }
 ```
 
