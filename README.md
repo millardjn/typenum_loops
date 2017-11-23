@@ -13,11 +13,11 @@ use typenum_loops::Loop;
 fn main(){
     let arr: &mut[usize] = &mut[0; 4];
     // for i in 0..4 {arr[i] = i} fully unrolled by 4
-    U4::full_unroll(|i| arr[i] = i);
+    U4::full_unroll(&mut |i| arr[i] = i);
     
     let arr2: &mut[usize] = &mut[0; 13];
     // for i in 0..13 {arr2[i] = i} unrolled by 6
-    U6::partial_unroll(13, |i, _| arr2[i] = i);
+    U6::partial_unroll(13, &mut |i, _| arr2[i] = i);
 }
 ```
 
